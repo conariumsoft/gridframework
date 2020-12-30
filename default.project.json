@@ -1,0 +1,114 @@
+{
+  "name": "gridframework",
+  "tree": {
+    "$className": "DataModel",
+    "HttpService": {
+      "$className": "HttpService",
+      "$properties": {
+        "HttpEnabled": true
+      }
+    },
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Ambient": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Technology": "Voxel",
+        "Brightness": 2.0,
+        "GlobalShadows": true,
+        "Outlines": false
+      }
+    },
+    "ReplicatedFirst": {
+      "$className": "ReplicatedFirst",
+      "$ignoreUnknownInstances" : true,
+      "framework": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances" : true,
+        "$path": "framework"
+      }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+
+      "StarterPlayerScripts" : {
+        "$className": "StarterPlayerScripts",
+
+        "clientmain": {
+          "$path": "src/client"
+        },
+        "CameraScript": {
+          "$className":"LocalScript"
+        },
+        "ControlScript": {
+          "$className":"LocalScript"
+        }
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "$ignoreUnknownInstances" : true,
+      "servermain": {
+        "$path": "src/server"
+      }
+    },
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "$ignoreUnknownInstances" : true,
+
+      "request" : {
+        "$className":"RemoteFunction"
+      },
+      "send" : {
+        "$className":"RemoteEvent"
+      },
+
+      "data": {
+        "$path": "data/shared"
+      }
+      
+    },
+    "ServerStorage": {
+      "$className": "ServerStorage",
+      "$ignoreUnknownInstances" : true,
+      "$path": "data/server"
+    },
+    "SoundService": {
+      "$className": "SoundService",
+      "$properties": {
+        "RespectFilteringEnabled": true
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "FilteringEnabled": true
+      },
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Size": [
+            512.0,
+            20.0,
+            512.0
+          ],
+          "Color": [
+            0.38823,
+            0.37254,
+            0.38823
+          ],
+          "Position": [
+            0.0,
+            -10.0,
+            0.0
+          ],
+          "Locked": true
+        }
+      }
+    }
+  }
+}
