@@ -256,9 +256,10 @@ end
 
 function session:on_remove_floor_request(request)
     local focused_layer = self.map:layer(request.layer);
+    
     if focused_layer.floor_objects[request.node] then
-        focused_layer.floormodels[request.node]:Destroy();
-        focused_layer.floor_objects[request.node] = nil;
+        --focused_layer.floormodels[request.node]:Destroy();
+        focused_layer.floor_objects[request.node]:Destroy();
         return { granted = true, reason = ""};
     end
     return { granted = false, reason = ""};

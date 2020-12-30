@@ -19,7 +19,7 @@ function wall_remover:get_selection_box()
         box.Parent = game.Workspace;
         self._selbox = box;
     end
-    return self._selbox
+    return self._selbox;
 end
 
 
@@ -27,10 +27,7 @@ function wall_remover.new(client)
     local self = setmetatable({}, wall_remover);
     self.client = client;
 
-
-   -- self.selectionbox = ;
-
-
+    --self.selectionbox = ;
     return self;
 end
 
@@ -40,11 +37,11 @@ function wall_remover:create_highlight(walltype)
     return f_part;
 end
 
-function wall_remover:get_nearest_floor_node(): Part
+function wall_remover:get_nearest_wall(): Part
     local coords = self.client:mouse().Hit.Position;
 
     local closest = nil;
-    tablex.foreach(self.client.map.FloorNodes:GetChildren(), function(_, node) 
+    tablex.foreach(self.client:getcurrentlayer().WallNodes:GetChildren(), function(_, node) 
         if closest == nil then closest = node end
 
         if (node.Position - coords).magnitude < (closest.Position - coords).magnitude then
@@ -54,7 +51,7 @@ function wall_remover:get_nearest_floor_node(): Part
     return closest;
 end
 
-function floor_remover:get_highlighted_floor() : Part
+function wall_remover:get_highlighted_wall() : Part
     local part = self.client:mouse().Target;
 
     if part.Parent == self.client.map.FloorModels then
@@ -62,41 +59,41 @@ function floor_remover:get_highlighted_floor() : Part
     end
 end
 
-function floor_remover:set_type(floortype)
+function wall_remover:set_type(floortype)
     self.floor_type = floortype
     if self.phantom_floor then
         self.phantom_floor:Destroy();
     end
-    self.phantom_floor = self:create_phantom(floortype)
-    self:deactivate()
-    self:activate()
+    self.phantom_floor = self:create_phantom(floortype);
+    self:deactivate();
+    self:activate();
 end
 
-function floor_remover:activate()
+function wall_remover:activate()
    --self.phantom_floor.Parent = game.Workspace;
 end
-function floor_remover:deactivate()
+function wall_remover:deactivate()
     --self.phantom_floor.Parent = game.Lighting;
 end
 
-function floor_remover:update(delta)
+function wall_remover:update(delta)
     local node = self:get_nearest_floor_node();
 
     self:get_selection_box().Adornee = self:get_highlighted_floor();
 end
 
-function floor_remover:input_begins(input)
+function wall_remover:input_begins(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        self.client:request_s(networking.request_type.REMOVE_FLOOR, {
+        self.client:request_s(networking.request_type.REMOVE_WALL, {
             node = self:get_nearest_floor_node(),
         });
     end
 end
-function floor_remover:input_ends(input)
+function wall_remover:input_ends(input)
 
 end
 
 
 
 
-return floor_remover;
+return wall_remover;

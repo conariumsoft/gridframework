@@ -1,3 +1,4 @@
+local UserInputService = game:GetService("UserInputService");
 local framework = game.ReplicatedFirst:WaitForChild("framework")
 
 local stdlibx = require(game.ReplicatedFirst.framework.stdlibx);
@@ -40,10 +41,36 @@ function floor_remover:create_highlight(walltype)
     return f_part;
 end
 
+local raycast_config = RaycastParams.new();
+raycast_config.FilterType = Enum.RaycastFilterType.Whitelist;
+raycast_config.IgnoreWater = true--?
+
+
+function floor_remover:raycast() : RaycastResult
+    local mouse_pos = UserInputService:GetMouseLocation();
+    local cam = self.client.camera.camera;
+    local m_ray = cam:ViewportPointToRay(mouse_pos.X, mouse_pos.Y)
+    raycast_config.FilterDescendantsInstances = {self.client:getcurrentlayer()}
+
+    return workspace:Raycast(m_ray.Origin, m_ray.Direction*500, raycast_config);
+end
+
 function floor_remover:get_nearest_floor_node(): Part
     local coords = self.client:mouse().Hit.Position;
 
+    local mouse_pos = UserInputService:GetMouseLocation();
+    local cam = self.client.camera.camera;
+    local mouse_ray = cam:ViewportPointToRay(mouse_pos.X, mouse_pos.Y)
+    raycast_config.FilterDescendantsInstances = {self.client:getcurrentlayer()}
+
+    
+    local result = self:raycast();
+    if result then
+        coords = result.Position;
+    end
+
     local closest = nil;
+
     tablex.foreach(self.client:getcurrentlayer().FloorNodes:GetChildren(), function(_, node) 
         if closest == nil then closest = node end
 
@@ -55,22 +82,14 @@ function floor_remover:get_nearest_floor_node(): Part
 end
 
 function floor_remover:get_highlighted_floor() : Part
-    local part = self.client:mouse().Target;
-
-    if part.Parent == self.client:getcurrentlayer().FloorModels then
-        return part;
+    local ray = self:raycast()--.Instance;
+    if ray then
+        if ray.Instance.Parent == self.client:getcurrentlayer().FloorModels then
+            return ray.Instance;
+        end
     end
 end
 
-function floor_remover:set_type(floortype)
-    self.floor_type = floortype
-    if self.phantom_floor then
-        self.phantom_floor:Destroy();
-    end
-    self.phantom_floor = self:create_phantom(floortype)
-    self:deactivate()
-    self:activate()
-end
 
 function floor_remover:activate()
    --self.phantom_floor.Parent = game.Workspace;
